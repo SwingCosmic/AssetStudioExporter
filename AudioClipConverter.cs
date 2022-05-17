@@ -8,8 +8,7 @@ namespace AssetStudio
     public class AudioClipConverter
     {
         private AudioClip m_AudioClip;
-
-        int[] version;
+        readonly int[] version;
 
         public AudioClipConverter(AudioClip audioClip, int[] version)
         {
