@@ -7,6 +7,7 @@
 	<Version>0.16.0.0</Version>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<Platforms>x64;x86</Platforms>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,12 +18,27 @@
 	  <ContentWithTargetPath Include="..\lib\x86\fmod.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <TargetPath>x86\fmod.dll</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="..\lib\x64\Texture2DDecoderNative.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x64\Texture2DDecoderNative.dll</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="..\lib\x86\Texture2DDecoderNative.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x86\Texture2DDecoderNative.dll</TargetPath>
 	  </ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="AssetsTools.NET">
       <HintPath>..\lib\AssetsTools.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Texture2DDecoderWrapper">
+      <HintPath>..\lib\Texture2DDecoderWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
 
