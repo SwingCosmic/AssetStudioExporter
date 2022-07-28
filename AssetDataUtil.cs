@@ -28,7 +28,7 @@ namespace AssetStudio
                 string searchPath = path;
                 if (path.StartsWith("archive:/"))
                 {
-                    searchPath = searchPath.Substring(9);
+                    searchPath = searchPath[9..];
                 }
                 searchPath = Path.GetFileName(searchPath);
                 AssetBundleFile bundle = inst.parentBundle.file;
@@ -51,6 +51,47 @@ namespace AssetStudio
                 }
             }
             return data;
+        }
+
+        /// <summary>
+        /// 获取AssetBundle Container
+        /// </summary>
+        /// <param name="inst">AssetsFileInstance</param>
+        /// <returns>Container字典</returns>
+        public static Dictionary<string, AssetPPtr> GetContainers(this AssetsFileInstance inst, AssetsManager am)
+        {
+            var ret = new Dictionary<string, AssetPPtr>();
+            var isAB = true;
+            var ab = inst.table.assetFileInfo.FirstOrDefault(f => f.curFileType == (uint)AssetClassID.AssetBundle);
+            if (ab is null)
+            {
+                ab = inst.table.assetFileInfo.FirstOrDefault(f => f.curFileType == (uint)AssetClassID.ResourceManager);
+                isAB = false;
+                if (ab is null)
+                {
+                    return ret;
+                }
+            }
+            var type = am.GetTypeInstance(inst.file, ab);
+            var bf = type.GetBaseField();
+
+            var m_Container = bf.Get("m_Container").Get("Array");
+            foreach (var container in m_Container.children)
+            {
+                var path = container.Get("first").GetValue().AsString();
+                var assetInfo = container.Get("second");
+                AssetTypeValueField asset = assetInfo;
+                if (isAB)
+                {
+                    var preloadIndex = assetInfo.Get("preloadIndex").GetValue().AsInt();
+                    var preloadSize = assetInfo.Get("preloadSize").GetValue().AsInt();
+                    asset = assetInfo.Get("asset"); 
+                }
+                var m_FileID = asset.Get("m_FileID").GetValue().AsInt();
+                var m_PathID = asset.Get("m_PathID").GetValue().AsInt64();
+                ret[path] = new AssetPPtr(m_FileID, m_PathID);
+            }
+            return ret;
         }
     }
 }
