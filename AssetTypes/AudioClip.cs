@@ -1,4 +1,5 @@
 ﻿using AssetsTools.NET;
+using AssetStudioExporter.AssetTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace AssetStudio
 {
-    public sealed class AudioClip
+    public sealed class AudioClip : IAssetTypeReader<AudioClip>
     {
         public string m_Name;
 
@@ -40,25 +41,25 @@ namespace AssetStudio
 
         }
 
-        public static AudioClip ReadAudioClip(AssetTypeValueField baseField)
+        public static AudioClip Read(AssetTypeValueField value)
         {
             var ac = new AudioClip();
 
-            ac.m_Name = baseField.Get("m_Name").GetValue().AsString();
-            ac.m_LoadType = baseField.Get("m_LoadType").GetValue().AsInt();
-            ac.m_Channels = baseField.Get("m_Channels").GetValue().AsInt();
-            ac.m_Frequency = baseField.Get("m_Frequency").GetValue().AsInt();
-            ac.m_BitsPerSample = baseField.Get("m_BitsPerSample").GetValue().AsInt();
-            ac.m_Length = baseField.Get("m_Length").GetValue().AsFloat();
-            ac.m_IsTrackerFormat = baseField.Get("m_IsTrackerFormat").GetValue().AsBool();
+            ac.m_Name = value.Get("m_Name").GetValue().AsString();
+            ac.m_LoadType = value.Get("m_LoadType").GetValue().AsInt();
+            ac.m_Channels = value.Get("m_Channels").GetValue().AsInt();
+            ac.m_Frequency = value.Get("m_Frequency").GetValue().AsInt();
+            ac.m_BitsPerSample = value.Get("m_BitsPerSample").GetValue().AsInt();
+            ac.m_Length = value.Get("m_Length").GetValue().AsFloat();
+            ac.m_IsTrackerFormat = value.Get("m_IsTrackerFormat").GetValue().AsBool();
             //ac.m_Ambisonic = bf.Get("m_Ambisonic").GetValue().AsBool();
-            ac.m_SubsoundIndex = baseField.Get("m_SubsoundIndex").GetValue().AsInt();
-            ac.m_PreloadAudioData = baseField.Get("m_PreloadAudioData").GetValue().AsBool();
-            ac.m_LoadInBackground = baseField.Get("m_LoadInBackground").GetValue().AsBool();
-            ac.m_Legacy3D = baseField.Get("m_Legacy3D").GetValue().AsBool();
-            ac.m_CompressionFormat = (AudioCompressionFormat)baseField.Get("m_CompressionFormat").GetValue().AsInt();
+            ac.m_SubsoundIndex = value.Get("m_SubsoundIndex").GetValue().AsInt();
+            ac.m_PreloadAudioData = value.Get("m_PreloadAudioData").GetValue().AsBool();
+            ac.m_LoadInBackground = value.Get("m_LoadInBackground").GetValue().AsBool();
+            ac.m_Legacy3D = value.Get("m_Legacy3D").GetValue().AsBool();
+            ac.m_CompressionFormat = (AudioCompressionFormat)value.Get("m_CompressionFormat").GetValue().AsInt();
 
-            var m_Resource = baseField.Get("m_Resource");
+            var m_Resource = value.Get("m_Resource");
             if (!m_Resource.IsDummy())
             {
                 ac.m_Source = m_Resource.Get("m_Source").GetValue().AsString();

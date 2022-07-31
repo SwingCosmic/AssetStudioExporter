@@ -8,6 +8,7 @@
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<Platforms>x64;x86</Platforms>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<EnablePreviewFeatures>True</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
