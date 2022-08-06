@@ -5,7 +5,7 @@ namespace AssetStudioExporter.AssetTypes
     public class MonoScript : IAssetTypeReader<MonoScript>
     {
         public string m_ClassName;
-
+         
         public string m_Namespace;
 
         public string m_AssemblyName;
