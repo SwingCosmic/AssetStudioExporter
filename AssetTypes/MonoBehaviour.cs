@@ -25,8 +25,17 @@ namespace AssetStudioExporter.AssetTypes
 
         public void FindPPtrInstance(AssetsFileInstance inst, AssetsManager am)
         {
-            var monoScript = m_Script.FollowReference(inst, am);
-            m_Script.Instance = MonoScript.Read(monoScript);
+            try
+            {
+                var monoScript = m_Script.FollowReference(inst, am);
+                m_Script.Instance = MonoScript.Read(monoScript);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Cannot read PPtr {{ FileID = {m_Script.m_FileID}, PathID = {m_Script.m_PathID} }}\n");
+                Console.WriteLine(ex);
+            }
+            
         }
 
         public static MonoBehaviour Read(AssetTypeValueField value)
