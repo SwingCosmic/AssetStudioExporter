@@ -8,25 +8,27 @@
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<Platforms>x64;x86</Platforms>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<LangVersion>11.0</LangVersion>
 	<EnablePreviewFeatures>True</EnablePreviewFeatures>
+	<GenerateRequiresPreviewFeaturesAttribute>True</GenerateRequiresPreviewFeaturesAttribute>
   </PropertyGroup>
 
   <ItemGroup>
-	  <ContentWithTargetPath Include="..\lib\x64\fmod.dll">
+	  <ContentWithTargetPath Include="lib/x64/fmod.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>x64\fmod.dll</TargetPath>
+		  <TargetPath>x64/fmod.dll</TargetPath>
 	  </ContentWithTargetPath>	  
-	  <ContentWithTargetPath Include="..\lib\x86\fmod.dll">
+	  <ContentWithTargetPath Include="lib/x86/fmod.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>x86\fmod.dll</TargetPath>
+		  <TargetPath>x86/fmod.dll</TargetPath>
 	  </ContentWithTargetPath>	  
-	  <ContentWithTargetPath Include="..\lib\x64\Texture2DDecoderNative.dll">
+	  <ContentWithTargetPath Include="lib/x64/Texture2DDecoderNative.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>x64\Texture2DDecoderNative.dll</TargetPath>
+		  <TargetPath>x64/Texture2DDecoderNative.dll</TargetPath>
 	  </ContentWithTargetPath>	  
-	  <ContentWithTargetPath Include="..\lib\x86\Texture2DDecoderNative.dll">
+	  <ContentWithTargetPath Include="lib/x86/Texture2DDecoderNative.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <TargetPath>x86\Texture2DDecoderNative.dll</TargetPath>
+		  <TargetPath>x86/Texture2DDecoderNative.dll</TargetPath>
 	  </ContentWithTargetPath>
   </ItemGroup>
 
