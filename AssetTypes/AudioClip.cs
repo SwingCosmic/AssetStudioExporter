@@ -1,4 +1,5 @@
-﻿using AssetsTools.NET;
+using AssetsTools.NET;
+using AssetsTools.NET.Extra;
 using AssetStudioExporter.AssetTypes;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace AssetStudio
 {
-    public sealed class AudioClip : IAssetTypeReader<AudioClip>
+    public sealed class AudioClip : IAssetTypeReader<AudioClip>, IAssetTypeExporter<AudioClip>
     {
         public string m_Name;
 
@@ -34,7 +35,14 @@ namespace AssetStudio
         public string m_Source;
         public long m_Offset; //ulong
         public long m_Size; //ulong
-        public byte[] m_AudioData;
+
+        [Obsolete("无法直接读取m_AudioData")]
+        internal readonly byte[] m_AudioData = Array.Empty<byte>();
+
+        public byte[] GetAudioData(AssetsFileInstance assetsFile)
+        {
+            return assetsFile.GetAssetData(m_Source, (uint)m_Size, m_Offset);
+        }
 
         public AudioClip()
         {
@@ -67,6 +75,14 @@ namespace AssetStudio
                 ac.m_Size = (long)m_Resource.Get("m_Size").GetValue().AsUInt64();
             }
             return ac;
+        }
+
+        public void Export(AssetsFileInstance assetsFile, Stream stream)
+        {
+            var m_AudioData = GetAudioData(assetsFile);
+            var converter = new AudioClipConverter(this, new[] { 2019 });
+            var wav = converter.ConvertToWav(m_AudioData) ?? throw new InvalidDataException("导出音频失败");
+            stream.Write(wav);
         }
     }
 

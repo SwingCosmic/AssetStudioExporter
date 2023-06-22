@@ -1,4 +1,4 @@
-﻿using FMOD;
+using FMOD;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,9 +16,8 @@ namespace AssetStudio
             this.version = version;
         }
 
-        public byte[] ConvertToWav()
+        public byte[]? ConvertToWav(byte[] m_AudioData)
         {
-            var m_AudioData = m_AudioClip.m_AudioData;
             if (m_AudioData == null || m_AudioData.Length == 0)
                 return null;
             var exinfo = new CREATESOUNDEXINFO();
@@ -54,7 +53,7 @@ namespace AssetStudio
             return buff;
         }
 
-        public byte[] SoundToWav(Sound sound)
+        public static byte[]? SoundToWav(Sound sound)
         {
             var result = sound.getFormat(out _, out _, out int channels, out int bits);
             if (result != RESULT.OK)

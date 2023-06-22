@@ -1,14 +1,18 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using Texture2DDecoder;
 using AssetsTools.NET;
+using AssetStudioExporter.AssetTypes;
+using AssetsTools.NET.Extra;
+using SixLabors.ImageSharp;
+using AssetStudio;
 
 namespace AssetStudio
 {
 	/// <summary>
 	/// 魔改的AssetStudio.Texture2DConverter，适配AssetsTools.NET并注释了暂需要额外库的格式
 	/// </summary>
-    public class Texture2DConverter
+    public class Texture2DConverter : IAssetTypeExporter<TextureFile>
     {
         //private ResourceReader reader;
         private int m_Width;
@@ -17,6 +21,7 @@ namespace AssetStudio
         private int[] version;
         //private BuildTarget platform;
         private int outPutSize;
+        private TextureFile texture2D;
 
         public Texture2DConverter(TextureFile m_Texture2D, int[] version)
         {
@@ -26,6 +31,7 @@ namespace AssetStudio
             this.version = version;
             //platform = m_Texture2D.platform;
             outPutSize = m_Width * m_Height * 4;
+            texture2D = m_Texture2D;
         }
 
         public bool DecodeTexture2D(byte[] buff, byte[] bytes)
@@ -705,6 +711,18 @@ namespace AssetStudio
                 return true;
             }
             return false;
+        }
+
+        public void Export(AssetsFileInstance assetsFile, Stream stream)
+        {
+            var path = texture2D.m_StreamData.path;
+            var size = texture2D.m_StreamData.size;
+            var offset = (long)texture2D.m_StreamData.offset;
+
+            var rawdata = assetsFile.GetAssetData(path, size, offset);
+
+            using var image = texture2D.ConvertToImage(rawdata, true);
+            image.SaveAsPng(stream);
         }
     }
 }
