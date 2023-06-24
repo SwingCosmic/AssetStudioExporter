@@ -11,6 +11,8 @@ namespace AssetStudioExporter.AssetTypes
 
     public class MonoBehaviour : IAssetTypeReader<MonoBehaviour>
     {
+        public static AssetClassID AssetClassID { get; } = AssetClassID.MonoBehaviour;
+
         public PPtr<MonoScript> m_Script;
 
         public string m_Name;

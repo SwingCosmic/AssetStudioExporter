@@ -1,6 +1,7 @@
-﻿using AssetsTools.NET;
+using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetStudio;
+using AssetStudioExporter.AssetTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,13 +55,12 @@ namespace AssetStudio
         }
 
         /// <summary>
-        /// 获取AssetBundle Container
+        /// 获取AssetBundle或ResourceManager的Container
         /// </summary>
         /// <param name="inst">AssetsFileInstance</param>
         /// <returns>Container字典</returns>
         public static Dictionary<string, AssetPPtr> GetContainers(this AssetsFileInstance inst, AssetsManager am)
         {
-            var ret = new Dictionary<string, AssetPPtr>();
             var isAB = true;
             var ab = inst.table.assetFileInfo.FirstOrDefault(f => f.curFileType == (uint)AssetClassID.AssetBundle);
             if (ab is null)
@@ -69,29 +69,25 @@ namespace AssetStudio
                 isAB = false;
                 if (ab is null)
                 {
-                    return ret;
+                    return new Dictionary<string, AssetPPtr>();
                 }
             }
             var type = am.GetTypeInstance(inst.file, ab);
             var bf = type.GetBaseField();
 
-            var m_Container = bf.Get("m_Container").Get("Array");
-            foreach (var container in m_Container.children)
+            if (isAB)
             {
-                var path = container.Get("first").GetValue().AsString();
-                var assetInfo = container.Get("second");
-                AssetTypeValueField asset = assetInfo;
-                if (isAB)
-                {
-                    var preloadIndex = assetInfo.Get("preloadIndex").GetValue().AsInt();
-                    var preloadSize = assetInfo.Get("preloadSize").GetValue().AsInt();
-                    asset = assetInfo.Get("asset"); 
-                }
-                var m_FileID = asset.Get("m_FileID").GetValue().AsInt();
-                var m_PathID = asset.Get("m_PathID").GetValue().AsInt64();
-                ret[path] = new AssetPPtr(m_FileID, m_PathID);
+                var assetBundle = AssetBundle.Read(bf);
+                return assetBundle.m_Container
+                    .Select(p => new KeyValuePair<string, AssetPPtr>(p.Key, p.Value.asset))
+                    .ToDictionary(p => p.Key, p => p.Value);
+            } else
+            {
+                var resourceManager = ResourceManager.Read(bf);
+                return resourceManager.m_Container
+                    .Select(p => new KeyValuePair<string, AssetPPtr>(p.Key, p.Value))
+                    .ToDictionary(p => p.Key, p => p.Value);
             }
-            return ret;
         }
 
         public static object? DeserializeMonoBehaviour(AssetTypeValueField monoBehaviour) =>

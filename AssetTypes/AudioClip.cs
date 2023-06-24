@@ -9,8 +9,12 @@ using System.Text;
 
 namespace AssetStudio
 {
-    public sealed class AudioClip : IAssetTypeReader<AudioClip>, IAssetTypeExporter<AudioClip>
+    public sealed class AudioClip : IAssetTypeReader<AudioClip>, IAssetTypeExporter
     {
+
+        public static AssetClassID AssetClassID { get; } = AssetClassID.AudioClip;
+
+
         public string m_Name;
 
 
@@ -38,6 +42,7 @@ namespace AssetStudio
 
         [Obsolete("无法直接读取m_AudioData")]
         internal readonly byte[] m_AudioData = Array.Empty<byte>();
+
 
         public byte[] GetAudioData(AssetsFileInstance assetsFile)
         {
@@ -77,12 +82,18 @@ namespace AssetStudio
             return ac;
         }
 
-        public void Export(AssetsFileInstance assetsFile, Stream stream)
+        public bool Export(AssetsFileInstance assetsFile, Stream stream)
         {
             var m_AudioData = GetAudioData(assetsFile);
             var converter = new AudioClipConverter(this, new[] { 2019 });
-            var wav = converter.ConvertToWav(m_AudioData) ?? throw new InvalidDataException("导出音频失败");
+            var wav = converter.ConvertToWav(m_AudioData);
+            if (wav is null)
+            {
+                Console.WriteLine($"Export audio clip '{m_Name}' failed");
+                return false;
+            }
             stream.Write(wav);
+            return true;
         }
     }
 

@@ -1,9 +1,12 @@
-﻿using AssetsTools.NET;
+using AssetsTools.NET;
+using AssetsTools.NET.Extra;
 
 namespace AssetStudioExporter.AssetTypes
 {
     public class MonoScript : IAssetTypeReader<MonoScript>
     {
+        public static AssetClassID AssetClassID { get; } = AssetClassID.MonoScript;
+
         public string m_ClassName;
          
         public string m_Namespace;

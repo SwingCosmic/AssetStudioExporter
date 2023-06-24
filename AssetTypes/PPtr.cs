@@ -10,6 +10,11 @@ namespace AssetStudioExporter.AssetTypes
 {
     public class PPtr<T> : IAssetTypeReader<PPtr<T>> where T : class
     {
+        /// <summary>
+        /// PPtr是一个特殊类型，不代表任何资产，但是会出现在任何资产的序列化里面
+        /// </summary>
+        public static AssetClassID AssetClassID { get; } = AssetClassID.Object;
+
         public int m_FileID;
         public long m_PathID;
 

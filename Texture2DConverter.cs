@@ -12,7 +12,7 @@ namespace AssetStudio
 	/// <summary>
 	/// 魔改的AssetStudio.Texture2DConverter，适配AssetsTools.NET并注释了暂需要额外库的格式
 	/// </summary>
-    public class Texture2DConverter : IAssetTypeExporter<TextureFile>
+    public class Texture2DConverter
     {
         //private ResourceReader reader;
         private int m_Width;
@@ -713,16 +713,5 @@ namespace AssetStudio
             return false;
         }
 
-        public void Export(AssetsFileInstance assetsFile, Stream stream)
-        {
-            var path = texture2D.m_StreamData.path;
-            var size = texture2D.m_StreamData.size;
-            var offset = (long)texture2D.m_StreamData.offset;
-
-            var rawdata = assetsFile.GetAssetData(path, size, offset);
-
-            using var image = texture2D.ConvertToImage(rawdata, true);
-            image.SaveAsPng(stream);
-        }
     }
 }
