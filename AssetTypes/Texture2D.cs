@@ -37,6 +37,8 @@ namespace AssetStudioExporter.AssetTypes
             m_LightmapFormat = textureFile.m_LightmapFormat;
             m_ColorSpace = textureFile.m_ColorSpace;
             m_StreamData = textureFile.m_StreamData;
+
+            pictureData = textureFile.pictureData;
         }
         public static Texture2D Read(AssetTypeValueField value)
         {
@@ -45,17 +47,26 @@ namespace AssetStudioExporter.AssetTypes
 
         public bool Export(AssetsFileInstance assetsFile, Stream stream)
         {
-            var path = m_StreamData.path;
-            var size = m_StreamData.size;
-            var offset = (long)m_StreamData.offset;
-
-            if (size == 0 || string.IsNullOrEmpty(path))
+            byte[] rawdata;
+            if (pictureData?.Length > 0)
             {
-                Console.WriteLine($"[WARN] Texture2D '{m_Name}' doesn't have any data, skipped");
-                return false;
+                rawdata = pictureData;
+            } 
+            else
+            {
+                var path = m_StreamData.path;
+                var size = m_StreamData.size;
+                var offset = (long)m_StreamData.offset;
+
+                if (size == 0 || string.IsNullOrEmpty(path))
+                {
+                    Console.WriteLine($"[WARN] Texture2D '{m_Name}' doesn't have any data, skipped");
+                    return false;
+                }
+
+                rawdata = assetsFile.GetAssetData(path, size, offset);
             }
 
-            var rawdata = assetsFile.GetAssetData(path, size, offset);
 
             using var image = this.ConvertToImage(rawdata, true);
             image.SaveAsPng(stream);
