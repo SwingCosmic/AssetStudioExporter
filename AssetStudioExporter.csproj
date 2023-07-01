@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="AssetsTools.NET" Version="3.0.0-preview3" />
+    <PackageReference Include="AssetsTools.NET.Texture" Version="1.0.0-preview2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
   </ItemGroup>
 
