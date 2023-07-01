@@ -58,26 +58,26 @@ namespace AssetStudio
         {
             var ac = new AudioClip();
 
-            ac.m_Name = value.Get("m_Name").GetValue().AsString();
-            ac.m_LoadType = value.Get("m_LoadType").GetValue().AsInt();
-            ac.m_Channels = value.Get("m_Channels").GetValue().AsInt();
-            ac.m_Frequency = value.Get("m_Frequency").GetValue().AsInt();
-            ac.m_BitsPerSample = value.Get("m_BitsPerSample").GetValue().AsInt();
-            ac.m_Length = value.Get("m_Length").GetValue().AsFloat();
-            ac.m_IsTrackerFormat = value.Get("m_IsTrackerFormat").GetValue().AsBool();
-            //ac.m_Ambisonic = bf.Get("m_Ambisonic").GetValue().AsBool();
-            ac.m_SubsoundIndex = value.Get("m_SubsoundIndex").GetValue().AsInt();
-            ac.m_PreloadAudioData = value.Get("m_PreloadAudioData").GetValue().AsBool();
-            ac.m_LoadInBackground = value.Get("m_LoadInBackground").GetValue().AsBool();
-            ac.m_Legacy3D = value.Get("m_Legacy3D").GetValue().AsBool();
-            ac.m_CompressionFormat = (AudioCompressionFormat)value.Get("m_CompressionFormat").GetValue().AsInt();
+            ac.m_Name = value.Get("m_Name").AsString;
+            ac.m_LoadType = value.Get("m_LoadType").AsInt;
+            ac.m_Channels = value.Get("m_Channels").AsInt;
+            ac.m_Frequency = value.Get("m_Frequency").AsInt;
+            ac.m_BitsPerSample = value.Get("m_BitsPerSample").AsInt;
+            ac.m_Length = value.Get("m_Length").AsFloat;
+            ac.m_IsTrackerFormat = value.Get("m_IsTrackerFormat").AsBool;
+            //ac.m_Ambisonic = bf.Get("m_Ambisonic").AsBool;
+            ac.m_SubsoundIndex = value.Get("m_SubsoundIndex").AsInt;
+            ac.m_PreloadAudioData = value.Get("m_PreloadAudioData").AsBool;
+            ac.m_LoadInBackground = value.Get("m_LoadInBackground").AsBool;
+            ac.m_Legacy3D = value.Get("m_Legacy3D").AsBool;
+            ac.m_CompressionFormat = (AudioCompressionFormat)value.Get("m_CompressionFormat").AsInt;
 
             var m_Resource = value.Get("m_Resource");
-            if (!m_Resource.IsDummy())
+            if (!m_Resource.IsDummy)
             {
-                ac.m_Source = m_Resource.Get("m_Source").GetValue().AsString();
-                ac.m_Offset = (long)m_Resource.Get("m_Offset").GetValue().AsUInt64();
-                ac.m_Size = (long)m_Resource.Get("m_Size").GetValue().AsUInt64();
+                ac.m_Source = m_Resource.Get("m_Source").AsString;
+                ac.m_Offset = (long)m_Resource.Get("m_Offset").AsULong;
+                ac.m_Size = (long)m_Resource.Get("m_Size").AsULong;
             }
             return ac;
         }

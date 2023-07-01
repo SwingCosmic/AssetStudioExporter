@@ -19,15 +19,15 @@ namespace AssetStudioExporter.AssetTypes
         {
             var f = new Font();
 
-            f.m_Name = value["m_Name"].GetValue().AsString();
+            f.m_Name = value["m_Name"].AsString;
             // 其它字段省略，因为整个字体文件都在m_FontData里面
 
             // WARN: 高内存占用警告！因为Unity的蜜汁类型定义不能直接返回byte[]，产生巨量包装类
             var arr = value["m_FontData"].Get("Array");
-            f.m_FontData = new byte[arr.childrenCount];
-            for (int i = 0; i < arr.childrenCount; i++)
+            f.m_FontData = new byte[arr.Children.Count];
+            for (int i = 0; i < arr.Children.Count; i++)
             {
-                f.m_FontData[i] = arr.children[i].value.value.asUInt8;
+                f.m_FontData[i] = arr.Children[i].AsByte;
             }
             return f;
         }

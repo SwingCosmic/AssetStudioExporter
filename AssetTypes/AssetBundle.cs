@@ -35,14 +35,14 @@ public class AssetBundle : IAssetTypeReader<AssetBundle>
         var ab = new AssetBundle();
 
         var m_Container = value.Get("m_Container").Get("Array");
-        foreach (var container in m_Container.children)
+        foreach (var container in m_Container.Children)
         {
 
-            var path = container.Get("first").GetValue().AsString();
+            var path = container.Get("first").AsString;
             var assetInfo = container.Get("second");
 
-            var preloadIndex = assetInfo.Get("preloadIndex").GetValue().AsInt();
-            var preloadSize = assetInfo.Get("preloadSize").GetValue().AsInt();
+            var preloadIndex = assetInfo.Get("preloadIndex").AsInt;
+            var preloadSize = assetInfo.Get("preloadSize").AsInt;
             var pptr = new PPtr<Object>(assetInfo.Get("asset"));
 
             ab.m_Container[path] = new AssetInfo(preloadIndex, preloadSize, pptr);

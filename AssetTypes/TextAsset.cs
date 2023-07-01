@@ -18,8 +18,8 @@ namespace AssetStudioExporter.AssetTypes
         {
             var textAsset = new TextAsset();
 
-            var str = value.Get("m_Script").GetValue();
-            textAsset.m_Script = str.AsStringBytes();
+            var str = value.Get("m_Script");
+            textAsset.m_Script = str.AsByteArray;
 
             return textAsset;
         }

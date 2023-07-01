@@ -17,7 +17,7 @@ namespace AssetStudioExporter.AssetTypes
 
         public string m_Name;
 
-        public AssetFileInfoEx? assetFile;
+        public AssetFileInfo? assetFile;
 
         public MonoBehaviour(string name, PPtr<MonoScript> monoScript)
         {
@@ -42,7 +42,7 @@ namespace AssetStudioExporter.AssetTypes
 
         public static MonoBehaviour Read(AssetTypeValueField value)
         {
-            var name = value["m_Name"].GetValue().AsString();
+            var name = value["m_Name"].AsString;
             var script = new PPtr<MonoScript>(value["m_Script"]);
             return new MonoBehaviour(name, script);
         }
@@ -51,19 +51,19 @@ namespace AssetStudioExporter.AssetTypes
 
     public static  class MonoBehaviourExtensions
     {
-        public static IList<MonoBehaviour> ReadAllMonoBehaviours(this AssetFileInfoEx gameObject, AssetsFileInstance inst, AssetsManager am)
+        public static IList<MonoBehaviour> ReadAllMonoBehaviours(this AssetFileInfo gameObject, AssetsFileInstance inst, AssetsManager am)
         {
-            var type = am.GetTypeInstance(inst.file, gameObject);
-            var components = type.GetBaseField()["m_Component"]["Array"];
+            var bf = am.GetBaseField(inst, gameObject);
+            var components = bf["m_Component"]["Array"];
 
             var ret = new List<MonoBehaviour>();
-            foreach (var comp in components.children)
+            foreach (var comp in components.Children)
             {
                 var childPtr = comp["component"];
                 var childExternal = am.GetExtAsset(inst, childPtr, true);
                 var childInfo = childExternal.info;
 
-                if (childInfo.curFileType != (uint)AssetClassID.MonoBehaviour)
+                if (childInfo.TypeId != (uint)AssetClassID.MonoBehaviour)
                 {
                     continue;
                 }

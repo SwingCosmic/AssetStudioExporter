@@ -33,14 +33,14 @@ namespace AssetStudio
                 }
                 searchPath = Path.GetFileName(searchPath);
                 AssetBundleFile bundle = inst.parentBundle.file;
-                AssetsFileReader reader = bundle.reader;
-                AssetBundleDirectoryInfo06[] dirInf = bundle.bundleInf6.dirInf;
+                AssetsFileReader reader = bundle.Reader;
+                AssetBundleDirectoryInfo[] dirInf = bundle.BlockAndDirInfo.DirectoryInfos;
                 bool foundFile = false;
-                foreach (AssetBundleDirectoryInfo06 info in dirInf)
+                foreach (AssetBundleDirectoryInfo info in dirInf)
                 {
-                    if (info.name == searchPath)
+                    if (info.Name == searchPath)
                     {
-                        reader.Position = bundle.bundleHeader6.GetFileDataOffset() + info.offset + offset;
+                        reader.Position = bundle.Header.GetFileDataOffset() + info.Offset + offset;
                         data = reader.ReadBytes((int)size);
                         foundFile = true;
                         break;
@@ -62,18 +62,17 @@ namespace AssetStudio
         public static Dictionary<string, AssetPPtr> GetContainers(this AssetsFileInstance inst, AssetsManager am)
         {
             var isAB = true;
-            var ab = inst.table.assetFileInfo.FirstOrDefault(f => f.curFileType == (uint)AssetClassID.AssetBundle);
+            var ab = inst.file.AssetInfos.FirstOrDefault(f => f.TypeId == (uint)AssetClassID.AssetBundle);
             if (ab is null)
             {
-                ab = inst.table.assetFileInfo.FirstOrDefault(f => f.curFileType == (uint)AssetClassID.ResourceManager);
+                ab = inst.file.AssetInfos.FirstOrDefault(f => f.TypeId == (uint)AssetClassID.ResourceManager);
                 isAB = false;
                 if (ab is null)
                 {
                     return new Dictionary<string, AssetPPtr>();
                 }
             }
-            var type = am.GetTypeInstance(inst.file, ab);
-            var bf = type.GetBaseField();
+            var bf = am.GetBaseField(inst, ab);
 
             if (isAB)
             {
@@ -91,32 +90,32 @@ namespace AssetStudio
         }
 
         public static object? DeserializeMonoBehaviour(AssetTypeValueField monoBehaviour) =>
-            monoBehaviour.GetValue() switch
+            monoBehaviour.Value switch
             {
-                AssetTypeValue v => v.type switch
+                AssetTypeValue v => v.ValueType switch
                 {
-                    EnumValueTypes.Bool => v.AsBool(),
-                    EnumValueTypes.Int8 => v.value.asInt8,
-                    EnumValueTypes.UInt8 => v.value.asUInt8,
-                    EnumValueTypes.Int16 => v.value.asInt16,
-                    EnumValueTypes.UInt16 => v.value.asUInt16,
-                    EnumValueTypes.Int32 => v.AsInt(),
-                    EnumValueTypes.UInt32 => v.AsUInt(),
-                    EnumValueTypes.Int64 => v.AsInt64(),
-                    EnumValueTypes.UInt64 => v.AsUInt64(),
-                    EnumValueTypes.Float => v.AsFloat(),
-                    EnumValueTypes.Double => v.AsDouble(),
-                    EnumValueTypes.String => v.AsString(),
-                    EnumValueTypes.Array => monoBehaviour.children
+                    AssetValueType.Bool => v.AsBool,
+                    AssetValueType.Int8 => v.AsByte,
+                    AssetValueType.UInt8 => v.AsSByte,
+                    AssetValueType.Int16 => v.AsShort,
+                    AssetValueType.UInt16 => v.AsUShort,
+                    AssetValueType.Int32 => v.AsInt,
+                    AssetValueType.UInt32 => v.AsUInt,
+                    AssetValueType.Int64 => v.AsLong,
+                    AssetValueType.UInt64 => v.AsULong,
+                    AssetValueType.Float => v.AsFloat,
+                    AssetValueType.Double => v.AsDouble,
+                    AssetValueType.String => v.AsString,
+                    AssetValueType.Array => monoBehaviour.Children
                         .Select(DeserializeMonoBehaviour)
                         .ToArray(),
-                    EnumValueTypes.ByteArray => v.AsByteArray().data,
+                    AssetValueType.ByteArray => v.AsByteArray,
                     _ => null
                 },
-                null => monoBehaviour.children
+                null => monoBehaviour.Children
                     .Aggregate(new Dictionary<string, dynamic?>(), (obj, c) =>
                     {
-                        var key = c.templateField.name;
+                        var key = c.TemplateField.Name;
                         var value = DeserializeMonoBehaviour(c);
                         obj[key] = value;
                         return obj;
@@ -126,30 +125,30 @@ namespace AssetStudio
         public static AssetTypeValueField SerializeMonoBehaviour(object? obj, AssetTypeTemplateField templateField)
         {
             var ret = new AssetTypeValueField();
-            ret.templateField = templateField;
+            ret.TemplateField = templateField;
 
-            ret.value = obj switch
+            ret.Value = obj switch
             {
-                null => new AssetTypeValue(EnumValueTypes.None, null),
-                bool b => new AssetTypeValue(EnumValueTypes.Bool, b),
-                sbyte int8 => new AssetTypeValue(EnumValueTypes.Int8, int8),
-                byte uint8 => new AssetTypeValue(EnumValueTypes.UInt8, uint8),
-                short int16 => new AssetTypeValue(EnumValueTypes.Int16, int16),
-                ushort uint16 => new AssetTypeValue(EnumValueTypes.UInt16, uint16),
-                int int32 => new AssetTypeValue(EnumValueTypes.Int32, int32),
-                uint uint32 => new AssetTypeValue(EnumValueTypes.UInt32, uint32),
-                long int64 => new AssetTypeValue(EnumValueTypes.Int64, int64),
-                ulong uint64 => new AssetTypeValue(EnumValueTypes.UInt64, uint64),
-                float f => new AssetTypeValue(EnumValueTypes.Float, f),
-                double d => new AssetTypeValue(EnumValueTypes.Double, d),
-                string s => new AssetTypeValue(EnumValueTypes.String, s),
+                null => new AssetTypeValue(AssetValueType.None, null),
+                bool b => new AssetTypeValue(AssetValueType.Bool, b),
+                sbyte int8 => new AssetTypeValue(AssetValueType.Int8, int8),
+                byte uint8 => new AssetTypeValue(AssetValueType.UInt8, uint8),
+                short int16 => new AssetTypeValue(AssetValueType.Int16, int16),
+                ushort uint16 => new AssetTypeValue(AssetValueType.UInt16, uint16),
+                int int32 => new AssetTypeValue(AssetValueType.Int32, int32),
+                uint uint32 => new AssetTypeValue(AssetValueType.UInt32, uint32),
+                long int64 => new AssetTypeValue(AssetValueType.Int64, int64),
+                ulong uint64 => new AssetTypeValue(AssetValueType.UInt64, uint64),
+                float f => new AssetTypeValue(AssetValueType.Float, f),
+                double d => new AssetTypeValue(AssetValueType.Double, d),
+                string s => new AssetTypeValue(AssetValueType.String, s),
                 IEnumerable<byte> barr => new AssetTypeValue(
-                    EnumValueTypes.ByteArray,
+                    AssetValueType.ByteArray,
                     barr.ToArray()),
                 _ => null
             };
 
-            if (ret.value is not null)
+            if (ret.Value is not null)
             {
                 return ret;
             }
@@ -157,37 +156,37 @@ namespace AssetStudio
 
             if (obj is IDictionary<string, dynamic> dict)
             {
-                ret.value = null;
-                ret.SetChildrenList(dict.Select(p =>
+                ret.Value = null;
+                ret.Children = dict.Select(p =>
                 {
-                    var temp = templateField.children.First(f => f.name == p.Key);
+                    var temp = templateField.Children.First(f => f.Name == p.Key);
                     AssetTypeValueField child = SerializeMonoBehaviour(p.Value, temp);
                     return child;
-                }).ToArray());
+                }).ToList();
             }
             else if (obj is IList<dynamic> arr)
             {
-                var array = new AssetTypeArray(arr.Count);
-                ret.SetChildrenList(arr
+                var array = new AssetTypeArrayInfo(arr.Count);
+                ret.Children =arr
                     .Select(x =>
                     {
-                        var temp = templateField.children[1];// [0]为size
-                    return (AssetTypeValueField)SerializeMonoBehaviour(x, temp);
+                        var temp = templateField.Children[1];// [0]为size
+                        return (AssetTypeValueField)SerializeMonoBehaviour(x, temp);
                     })
-                    .ToArray());
-                ret.value = new AssetTypeValue(EnumValueTypes.Array, array);
+                    .ToList();
+                ret.Value = new AssetTypeValue(AssetValueType.Array, array);
             }
             else
             {
-                ret.value = null;
+                ret.Value = null;
                 Type type = obj!.GetType();
-                ret.SetChildrenList(type.GetFields().Select(f =>
+                ret.Children = type.GetFields().Select(f =>
                 {
                     var key = f.Name;
-                    var temp = templateField.children.First(f => f.name == key);
+                    var temp = templateField.Children.First(f => f.Name == key);
                     AssetTypeValueField child = SerializeMonoBehaviour(f.GetValue(obj), temp);
                     return child;
-                }).ToArray());
+                }).ToList();
             }
 
 

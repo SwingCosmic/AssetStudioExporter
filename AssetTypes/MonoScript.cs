@@ -22,9 +22,9 @@ namespace AssetStudioExporter.AssetTypes
 
         public static MonoScript Read(AssetTypeValueField value)
         {
-            var className = value["m_ClassName"].GetValue().AsString();
-            var ns = value["m_Namespace"].GetValue().AsString() ?? "";
-            var asm = value["m_AssemblyName"].GetValue().AsString();
+            var className = value["m_ClassName"].AsString;
+            var ns = value["m_Namespace"].AsString ?? "";
+            var asm = value["m_AssemblyName"].AsString;
             return new MonoScript(asm, className, ns);
         }
     }

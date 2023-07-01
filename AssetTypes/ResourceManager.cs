@@ -21,10 +21,10 @@ public class ResourceManager : IAssetTypeReader<ResourceManager>
         var rm = new ResourceManager();
 
         var m_Container = value.Get("m_Container").Get("Array");
-        foreach (var container in m_Container.children)
+        foreach (var container in m_Container.Children)
         {
 
-            var path = container.Get("first").GetValue().AsString();
+            var path = container.Get("first").AsString;
             var assetInfo = container.Get("second");
 
             rm.m_Container[path] = new PPtr<Object>(assetInfo);

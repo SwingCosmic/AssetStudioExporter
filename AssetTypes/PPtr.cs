@@ -28,8 +28,8 @@ namespace AssetStudioExporter.AssetTypes
         
         public PPtr(AssetTypeValueField value)
         {
-            m_FileID = value["m_FileID"].GetValue().AsInt();
-            m_PathID = value["m_PathID"].GetValue().AsInt64();
+            m_FileID = value["m_FileID"].AsInt;
+            m_PathID = value["m_PathID"].AsLong;
         }
 
         public static implicit operator AssetPPtr(PPtr<T> self)
@@ -39,13 +39,13 @@ namespace AssetStudioExporter.AssetTypes
         
         public static explicit operator PPtr<T>(AssetPPtr pptr)
         {
-            return new PPtr<T>(pptr.fileID, pptr.pathID);
+            return new PPtr<T>(pptr.FileId, pptr.PathId);
         }
         
         public AssetTypeValueField FollowReference(AssetsFileInstance relativeFile, AssetsManager am, bool onlyGetInfo = false)
         {
             var assetExternal = am.GetExtAsset(relativeFile, m_FileID, m_PathID, onlyGetInfo);
-            return assetExternal.instance.GetBaseField();
+            return assetExternal.baseField;
         }
 
         public static PPtr<T> Read(AssetTypeValueField value)
