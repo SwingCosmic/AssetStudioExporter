@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AssetStudioExporter.AssetTypes;
 
 
-public class ResourceManager : IAssetTypeReader<ResourceManager>
+public class ResourceManager : IAssetType, IAssetTypeReader<ResourceManager>
 {
     public static AssetClassID AssetClassID { get; } = AssetClassID.ResourceManager;
 

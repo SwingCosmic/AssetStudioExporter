@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Texture2D : TextureFile, IAssetTypeReader<Texture2D>, IAssetTypeExporter
+    public class Texture2D : TextureFile, IAssetType, IAssetTypeReader<Texture2D>, IAssetTypeExporter
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Texture2D;
 

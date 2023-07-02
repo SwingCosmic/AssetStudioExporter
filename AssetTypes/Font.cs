@@ -1,5 +1,6 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using AssetStudio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Font : IAssetTypeReader<Font>, IAssetTypeExporter
+    public class Font : IAssetType, IAssetTypeReader<Font>, IAssetTypeExporter
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Font;
 
         public string m_Name;
-        public byte[] m_FontData = { };
+        public byte[] m_FontData = Array.Empty<byte>();
 
         public static Font Read(AssetTypeValueField value)
         {
@@ -24,10 +25,14 @@ namespace AssetStudioExporter.AssetTypes
 
             // WARN: 高内存占用警告！因为Unity的蜜汁类型定义不能直接返回byte[]，产生巨量包装类
             var arr = value["m_FontData"].Get("Array");
-            f.m_FontData = new byte[arr.Children.Count];
-            for (int i = 0; i < arr.Children.Count; i++)
+            var length = arr.Children.Count;
+            if (length > 0)
             {
-                f.m_FontData[i] = arr.Children[i].AsByte;
+                f.m_FontData = new byte[length];
+                for (int i = 0; i < length; i++)
+                {
+                    f.m_FontData[i] = arr.Children[i].AsByte;
+                }                
             }
             return f;
         }

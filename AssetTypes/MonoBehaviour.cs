@@ -1,5 +1,6 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using AssetStudio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace AssetStudioExporter.AssetTypes
 {
 
-    public class MonoBehaviour : IAssetTypeReader<MonoBehaviour>
+    public class MonoBehaviour : IAssetType, IAssetTypeReader<MonoBehaviour>
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.MonoBehaviour;
 
@@ -17,27 +18,12 @@ namespace AssetStudioExporter.AssetTypes
 
         public string m_Name;
 
-        public AssetFileInfo? assetFile;
+        public AssetFileInfo? AssetInfo { get; internal set; }
 
         public MonoBehaviour(string name, PPtr<MonoScript> monoScript)
         {
             m_Name = name;
             m_Script = monoScript;
-        }
-
-        public void FindPPtrInstance(AssetsFileInstance inst, AssetsManager am)
-        {
-            try
-            {
-                var monoScript = m_Script.FollowReference(inst, am);
-                m_Script.Instance = MonoScript.Read(monoScript);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Cannot read PPtr {{ FileID = {m_Script.m_FileID}, PathID = {m_Script.m_PathID} }}\n");
-                Console.WriteLine(ex);
-            }
-            
         }
 
         public static MonoBehaviour Read(AssetTypeValueField value)
@@ -47,37 +33,5 @@ namespace AssetStudioExporter.AssetTypes
             return new MonoBehaviour(name, script);
         }
 
-    }
-
-    public static  class MonoBehaviourExtensions
-    {
-        public static IList<MonoBehaviour> ReadAllMonoBehaviours(this AssetFileInfo gameObject, AssetsFileInstance inst, AssetsManager am)
-        {
-            var bf = am.GetBaseField(inst, gameObject);
-            var components = bf["m_Component"]["Array"];
-
-            var ret = new List<MonoBehaviour>();
-            foreach (var comp in components.Children)
-            {
-                var childPtr = comp["component"];
-                var childExternal = am.GetExtAsset(inst, childPtr, true);
-                var childInfo = childExternal.info;
-
-                if (childInfo.TypeId != (uint)AssetClassID.MonoBehaviour)
-                {
-                    continue;
-                }
-
-                var mbPtr = new PPtr<MonoBehaviour>(childPtr);
-                var monoBehaviour = mbPtr.FollowReference(inst, am);
-                var mb = MonoBehaviour.Read(monoBehaviour);
-                mb.assetFile = childInfo;
-                mb.FindPPtrInstance(inst, am);
-
-                ret.Add(mb);
-
-            }
-            return ret;
-        }
     }
 }

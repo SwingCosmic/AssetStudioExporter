@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Object : IAssetTypeReader<Object>
+    public class Object : IAssetType, IAssetTypeReader<Object>
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Object;
 

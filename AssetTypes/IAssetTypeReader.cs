@@ -1,5 +1,4 @@
 using AssetsTools.NET;
-using AssetsTools.NET.Extra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,5 @@ namespace AssetStudioExporter.AssetTypes
         /// <returns><typeparamref name="T"/>类型的AssetType</returns>
         static abstract T Read(AssetTypeValueField value);
 
-        static abstract AssetClassID AssetClassID { get; }
-    }    
+    }   
 }

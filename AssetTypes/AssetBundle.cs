@@ -23,7 +23,7 @@ public class AssetInfo
     }
 }
 
-public class AssetBundle : IAssetTypeReader<AssetBundle>
+public class AssetBundle : IAssetType, IAssetTypeReader<AssetBundle>
 {
     public static AssetClassID AssetClassID { get; } = AssetClassID.AssetBundle;
 

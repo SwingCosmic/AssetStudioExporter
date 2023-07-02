@@ -1,9 +1,10 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using System.Globalization;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class MonoScript : IAssetTypeReader<MonoScript>
+    public class MonoScript : IAssetType, IAssetTypeReader<MonoScript>
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.MonoScript;
 
@@ -12,6 +13,15 @@ namespace AssetStudioExporter.AssetTypes
         public string m_Namespace;
 
         public string m_AssemblyName;
+
+        public string FullName
+        {
+            get
+            {
+                var ns = string.IsNullOrEmpty(m_Namespace) ? "" : (m_Namespace + ".");
+                return ns + m_ClassName;
+            }
+        }
 
         public MonoScript(string assembly, string className, string @namespace = "")
         {

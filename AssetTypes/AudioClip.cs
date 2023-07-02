@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AssetStudio
 {
-    public sealed class AudioClip : IAssetTypeReader<AudioClip>, IAssetTypeExporter
+    public sealed class AudioClip : IAssetType, IAssetTypeReader<AudioClip>, IAssetTypeExporter
     {
 
         public static AssetClassID AssetClassID { get; } = AssetClassID.AudioClip;
