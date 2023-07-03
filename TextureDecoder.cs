@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using AssetStudio.PInvoke;
 
@@ -9,7 +9,7 @@ namespace Texture2DDecoder
 
         static TextureDecoder()
         {
-            DllLoader.PreloadDll(T2DDll.DllName);
+            DllLoaderNative.PreloadDll(T2DDll.DllName);
         }
 
         public static bool DecodeDXT1(byte[] data, int width, int height, byte[] image)

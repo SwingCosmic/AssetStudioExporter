@@ -1591,7 +1591,7 @@ namespace FMOD
 
         static Factory()
         {
-            DllLoader.PreloadDll(VERSION.dll);
+            DllLoaderNative.PreloadDll(VERSION.dll);
         }
 
         public static RESULT System_Create(out System system)
