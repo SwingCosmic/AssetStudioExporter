@@ -325,3 +325,6 @@ ASALocalRun/
 
 # Zip releases
 *.zip
+
+!lib/x86
+!lib/x64
