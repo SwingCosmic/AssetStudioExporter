@@ -2,6 +2,7 @@ using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetsTools.NET.Texture;
 using AssetStudio;
+using AssetStudioExporter.Export;
 using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,11 @@ namespace AssetStudioExporter.AssetTypes
 
         public bool Export(AssetsFileInstance assetsFile, Stream stream)
         {
+            return Export(assetsFile, stream, ExporterSetting.Default.ImageExportFormat);
+        }        
+        
+        public bool Export(AssetsFileInstance assetsFile, Stream stream, ImageFormat format)
+        {
             byte[] rawdata;
             if (pictureData?.Length > 0)
             {
@@ -70,7 +76,32 @@ namespace AssetStudioExporter.AssetTypes
 
 
             using var image = this.ConvertToImage(rawdata, true);
-            image.SaveAsPng(stream);
+            switch (format)
+            {
+                case ImageFormat.Jpeg:
+                    image.SaveAsJpeg(stream);
+                    break;
+                case ImageFormat.Webp:
+                    image.SaveAsWebp(stream);
+                    break;
+                case ImageFormat.Tga: 
+                    image.SaveAsTga(stream);
+                    break;
+                case ImageFormat.Tiff: 
+                    image.SaveAsTiff(stream);
+                    break;
+                case ImageFormat.Bmp: 
+                    image.SaveAsBmp(stream); 
+                    break;                
+                case ImageFormat.Gif: 
+                    image.SaveAsGif(stream); 
+                    break;
+                default:
+                    image.SaveAsPng(stream);
+                    break;
+            }
+           
+            
             return true;
         }
     }

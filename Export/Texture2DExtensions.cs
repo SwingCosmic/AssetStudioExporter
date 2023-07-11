@@ -1,11 +1,12 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Texture;
+using AssetStudio;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
 
-namespace AssetStudio
+namespace AssetStudioExporter.Export
 {
     public static class Texture2DExtensions
     {

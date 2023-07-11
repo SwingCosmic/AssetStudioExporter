@@ -1,6 +1,7 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetStudioExporter.AssetTypes;
+using AssetStudioExporter.Export;
 using System;
 using System.Collections.Generic;
 using System.IO;

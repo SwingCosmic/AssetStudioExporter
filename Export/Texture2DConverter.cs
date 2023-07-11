@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.CompilerServices;
 using Texture2DDecoder;
 using AssetsTools.NET;
@@ -7,8 +6,9 @@ using AssetsTools.NET.Extra;
 using SixLabors.ImageSharp;
 using AssetStudio;
 using AssetsTools.NET.Texture;
+using Half = AssetStudio.Half;
 
-namespace AssetStudio
+namespace AssetStudioExporter.Export
 {
     /// <summary>
     /// 魔改的AssetStudio.Texture2DConverter，适配AssetsTools.NET并注释了暂需要额外库的格式
@@ -262,7 +262,7 @@ namespace AssetStudio
                 pixelNew[2] = (byte)((pixelOldShort & 0x0f00) >> 8);
                 pixelNew[3] = (byte)((pixelOldShort & 0xf000) >> 12);
                 for (var j = 0; j < 4; j++)
-                    pixelNew[j] = (byte)((pixelNew[j] << 4) | pixelNew[j]);
+                    pixelNew[j] = (byte)(pixelNew[j] << 4 | pixelNew[j]);
                 pixelNew.CopyTo(buff, i * 4);
             }
             return true;
@@ -311,9 +311,9 @@ namespace AssetStudio
             for (var i = 0; i < size; i++)
             {
                 var p = BitConverter.ToUInt16(image_data, i * 2);
-                buff[i * 4] = (byte)((p << 3) | (p >> 2 & 7));
-                buff[i * 4 + 1] = (byte)((p >> 3 & 0xfc) | (p >> 9 & 3));
-                buff[i * 4 + 2] = (byte)((p >> 8 & 0xf8) | (p >> 13));
+                buff[i * 4] = (byte)(p << 3 | p >> 2 & 7);
+                buff[i * 4 + 1] = (byte)(p >> 3 & 0xfc | p >> 9 & 3);
+                buff[i * 4 + 2] = (byte)(p >> 8 & 0xf8 | p >> 13);
                 buff[i * 4 + 3] = 255;
             }
             return true;
@@ -354,7 +354,7 @@ namespace AssetStudio
                 pixelNew[2] = (byte)((pixelOldShort & 0xf000) >> 12);
                 pixelNew[3] = (byte)(pixelOldShort & 0x000f);
                 for (var j = 0; j < 4; j++)
-                    pixelNew[j] = (byte)((pixelNew[j] << 4) | pixelNew[j]);
+                    pixelNew[j] = (byte)(pixelNew[j] << 4 | pixelNew[j]);
                 pixelNew.CopyTo(buff, i * 4);
             }
             return true;
@@ -447,7 +447,7 @@ namespace AssetStudio
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static byte ClampByte(int x)
         {
-            return (byte)(byte.MaxValue < x ? byte.MaxValue : (x > byte.MinValue ? x : byte.MinValue));
+            return (byte)(byte.MaxValue < x ? byte.MaxValue : x > byte.MinValue ? x : byte.MinValue);
         }
 
         private bool DecodeYUY2(byte[] image_data, byte[] buff)
@@ -466,14 +466,14 @@ namespace AssetStudio
                     int c = y0 - 16;
                     int d = u0 - 128;
                     int e = v0 - 128;
-                    buff[o++] = ClampByte((298 * c + 516 * d + 128) >> 8);            // b
-                    buff[o++] = ClampByte((298 * c - 100 * d - 208 * e + 128) >> 8);  // g
-                    buff[o++] = ClampByte((298 * c + 409 * e + 128) >> 8);            // r
+                    buff[o++] = ClampByte(298 * c + 516 * d + 128 >> 8);            // b
+                    buff[o++] = ClampByte(298 * c - 100 * d - 208 * e + 128 >> 8);  // g
+                    buff[o++] = ClampByte(298 * c + 409 * e + 128 >> 8);            // r
                     buff[o++] = 255;
                     c = y1 - 16;
-                    buff[o++] = ClampByte((298 * c + 516 * d + 128) >> 8);            // b
-                    buff[o++] = ClampByte((298 * c - 100 * d - 208 * e + 128) >> 8);  // g
-                    buff[o++] = ClampByte((298 * c + 409 * e + 128) >> 8);            // r
+                    buff[o++] = ClampByte(298 * c + 516 * d + 128 >> 8);            // b
+                    buff[o++] = ClampByte(298 * c - 100 * d - 208 * e + 128 >> 8);  // g
+                    buff[o++] = ClampByte(298 * c + 409 * e + 128 >> 8);            // r
                     buff[o++] = 255;
                 }
             }
@@ -655,7 +655,7 @@ namespace AssetStudio
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte DownScaleFrom16BitTo8Bit(ushort component)
         {
-            return (byte)(((component * 255) + 32895) >> 16);
+            return (byte)(component * 255 + 32895 >> 16);
         }
 
         private bool DecodeRG32(byte[] image_data, byte[] buff)
@@ -697,7 +697,7 @@ namespace AssetStudio
 
         private bool UnpackCrunch(byte[] image_data, out byte[] result)
         {
-            if (version[0] > 2017 || (version[0] == 2017 && version[1] >= 3) //2017.3 and up
+            if (version[0] > 2017 || version[0] == 2017 && version[1] >= 3 //2017.3 and up
                 || m_TextureFormat == TextureFormat.ETC_RGB4Crunched
                 || m_TextureFormat == TextureFormat.ETC2_RGBA8Crunched)
             {

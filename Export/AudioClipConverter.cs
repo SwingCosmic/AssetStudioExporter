@@ -1,9 +1,10 @@
+using AssetStudio;
 using FMOD;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AssetStudio
+namespace AssetStudioExporter.Export
 {
     public class AudioClipConverter
     {
