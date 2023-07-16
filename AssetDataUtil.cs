@@ -26,22 +26,22 @@ namespace AssetStudio
             byte[] data = Array.Empty<byte>();
             if (path != null && inst.parentBundle != null)
             {
-                string searchPath = path;
+                string text = path;
                 if (path.StartsWith("archive:/"))
                 {
-                    searchPath = searchPath[9..];
+                    text = text[9..];
                 }
-                searchPath = Path.GetFileName(searchPath);
-                AssetBundleFile bundle = inst.parentBundle.file;
-                AssetsFileReader reader = bundle.Reader;
-                AssetBundleDirectoryInfo[] dirInf = bundle.BlockAndDirInfo.DirectoryInfos;
+                text = Path.GetFileName(text);
+                AssetBundleFile file = inst.parentBundle.file;
+                AssetsFileReader dataReader = file.DataReader;
+                AssetBundleDirectoryInfo[] directoryInfos = file.BlockAndDirInfo.DirectoryInfos;
                 bool foundFile = false;
-                foreach (AssetBundleDirectoryInfo info in dirInf)
+                foreach (AssetBundleDirectoryInfo assetBundleDirectoryInfo in directoryInfos)
                 {
-                    if (info.Name == searchPath)
+                    if (assetBundleDirectoryInfo.Name == text)
                     {
-                        reader.Position = bundle.Header.GetFileDataOffset() + info.Offset + offset;
-                        data = reader.ReadBytes((int)size);
+                        dataReader.Position = assetBundleDirectoryInfo.Offset + offset;
+                        data = dataReader.ReadBytes((int)size);
                         foundFile = true;
                         break;
                     }
