@@ -1,27 +1,38 @@
 using AssetsTools.NET.Extra;
 
-namespace AssetStudioExporter.AssetTypes
-{
-    public interface IAssetTypeExporter
-    {
-        /// <summary>
-        /// 导出当前AssetType
-        /// </summary>
-        /// <param name="assetsFile">AssetsFile</param>
-        /// <param name="stream">要输出的流</param>
-        bool Export(AssetsFileInstance assetsFile, Stream stream);
+namespace AssetStudioExporter.AssetTypes;
 
-        void Export(AssetsFileInstance assetsFile, string fileName)
+public interface IAssetTypeExporter
+{
+    /// <summary>
+    /// 导出当前AssetType
+    /// </summary>
+    /// <param name="assetsFile">AssetsFile</param>
+    /// <param name="stream">要输出的流</param>
+    /// <returns>是否导出成功</returns>
+    bool Export(AssetsFileInstance assetsFile, Stream stream);
+
+    void Export(AssetsFileInstance assetsFile, string fileName)
+    {
+        using(var fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
         {
-            using(var fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+            if (Export(assetsFile, fs))
             {
-                if (Export(assetsFile, fs))
-                {
-                    return;
-                }
+                return;
             }
-            // 未能导出，删掉空文件
-            File.Delete(fileName);
         }
+        // 未能导出，删掉空文件
+        File.Delete(fileName);
     }
+}
+
+
+public interface IFormatAssetTypeExporter<TFormat>
+{
+    bool Export(AssetsFileInstance assetsFile, Stream stream, TFormat format);
+}
+
+public interface IMultipleFileAssetTypeExporter
+{
+    bool Export(AssetsFileInstance assetsFile, DirectoryInfo outputDir);
 }
