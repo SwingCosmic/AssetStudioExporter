@@ -342,5 +342,11 @@ namespace AssetStudioExporter.AssetTypes
             return output;
         }
 
+        public string GetFileExtension(string fileName)
+        {
+            if (ExporterSetting.Default.ImageExportFormat == ImageFormat.Auto)
+                return ".png";
+            return "." + ExporterSetting.Default.ImageExportFormat.ToString().ToLower();
+        }
     }
 }

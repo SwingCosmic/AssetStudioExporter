@@ -24,6 +24,8 @@ public interface IAssetTypeExporter
         // 未能导出，删掉空文件
         File.Delete(fileName);
     }
+
+    string GetFileExtension(string fileName);
 }
 
 

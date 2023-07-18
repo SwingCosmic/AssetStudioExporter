@@ -31,7 +31,7 @@ namespace AssetStudioExporter.AssetTypes
             {
                 return ext;
             }
-            return "txt";
+            return ".txt";
         }
 
         public bool Export(AssetsFileInstance assetsFile, Stream stream)

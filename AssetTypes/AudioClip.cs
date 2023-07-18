@@ -96,6 +96,11 @@ namespace AssetStudio
             stream.Write(wav);
             return true;
         }
+
+        public string GetFileExtension(string fileName)
+        {
+            return ".wav";
+        }
     }
 
     public enum AudioType

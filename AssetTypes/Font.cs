@@ -39,17 +39,12 @@ namespace AssetStudioExporter.AssetTypes
 
         public string GetFileExtension(string name)
         {
-            if (m_FontData.Length == 0)
-            {
-                return "bin";
-            }
-
             if (m_FontData[0..4].SequenceEqual(Encoding.ASCII.GetBytes("OTTO")))
             {
-                return "otf";
+                return ".otf";
             } else
             {
-                return "ttf";
+                return ".ttf";
             }
         }
 
