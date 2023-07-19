@@ -129,9 +129,9 @@ namespace AssetStudio.PInvoke
     {
         private static string GetDirectedDllDirectory()
         {
-            //var localPath = Process.GetCurrentProcess().MainModule.FileName;
-            //var localDir = Path.GetDirectoryName(localPath);
-            var localDir = AppContext.BaseDirectory;
+            var localPath = Assembly.GetExecutingAssembly().Location;
+            var localDir = Path.GetDirectoryName(localPath);
+            Console.WriteLine($"当前应用路径：{localDir}");
 
             var subDir = Environment.Is64BitProcess ? "x64" : "x86";
 
