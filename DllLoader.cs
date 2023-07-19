@@ -28,8 +28,9 @@ namespace AssetStudio.PInvoke
 
         private static string GetDirectedDllDirectory()
         {
-            var localPath = Process.GetCurrentProcess().MainModule.FileName;
-            var localDir = Path.GetDirectoryName(localPath);
+            //var localPath = Process.GetCurrentProcess().MainModule.FileName;
+            //var localDir = Path.GetDirectoryName(localPath);
+            var localDir = AppContext.BaseDirectory;
 
             var subDir = Environment.Is64BitProcess ? "x64" : "x86";
 
@@ -128,8 +129,9 @@ namespace AssetStudio.PInvoke
     {
         private static string GetDirectedDllDirectory()
         {
-            var localPath = Process.GetCurrentProcess().MainModule.FileName;
-            var localDir = Path.GetDirectoryName(localPath);
+            //var localPath = Process.GetCurrentProcess().MainModule.FileName;
+            //var localDir = Path.GetDirectoryName(localPath);
+            var localDir = AppContext.BaseDirectory;
 
             var subDir = Environment.Is64BitProcess ? "x64" : "x86";
 
@@ -142,7 +144,7 @@ namespace AssetStudio.PInvoke
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return$"{dllName}.dll";
+                return $"{dllName}.dll";
             } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 return $"lib{dllName}.so";
