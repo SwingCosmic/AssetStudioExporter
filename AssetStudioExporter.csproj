@@ -22,6 +22,30 @@
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <TargetPath>x86/fmod.dll</TargetPath>
 	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x64/libfmod.so">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x64/libfmod.so</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x86/libfmod.so">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x86/libfmod.so</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x64/libfmod.so.8">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x64/libfmod.so.8</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x86/libfmod.so.8">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x86/libfmod.so.8</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x64/libfmod.so.8.30">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x64/libfmod.so.8.30</TargetPath>
+	  </ContentWithTargetPath>	  
+	  <ContentWithTargetPath Include="lib/x86/libfmod.so.8.30">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>x86/libfmod.so.8.30</TargetPath>
+	  </ContentWithTargetPath>	  
 	  <ContentWithTargetPath Include="lib/x64/Texture2DDecoderNative.dll">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		  <TargetPath>x64/Texture2DDecoderNative.dll</TargetPath>
