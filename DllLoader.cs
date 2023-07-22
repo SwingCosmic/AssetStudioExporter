@@ -131,7 +131,6 @@ namespace AssetStudio.PInvoke
         {
             var localPath = Assembly.GetExecutingAssembly().Location;
             var localDir = Path.GetDirectoryName(localPath);
-            Console.WriteLine($"当前应用路径：{localDir}");
 
             var subDir = Environment.Is64BitProcess ? "x64" : "x86";
 
@@ -160,6 +159,7 @@ namespace AssetStudio.PInvoke
         public static void PreloadDll(string dllName)
         {
             var name = Path.Combine(GetDirectedDllDirectory(), GetFileName(dllName));
+            Console.WriteLine($"dll位置：{name}");
             NativeLibrary.Load(name);
         }
     }
