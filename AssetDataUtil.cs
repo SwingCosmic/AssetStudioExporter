@@ -34,7 +34,7 @@ namespace AssetStudio
                 text = Path.GetFileName(text);
                 AssetBundleFile file = inst.parentBundle.file;
                 AssetsFileReader dataReader = file.DataReader;
-                AssetBundleDirectoryInfo[] directoryInfos = file.BlockAndDirInfo.DirectoryInfos;
+                var directoryInfos = file.BlockAndDirInfo.DirectoryInfos;
                 bool foundFile = false;
                 foreach (AssetBundleDirectoryInfo assetBundleDirectoryInfo in directoryInfos)
                 {
