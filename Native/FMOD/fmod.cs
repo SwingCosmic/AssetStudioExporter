@@ -7,7 +7,7 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
-using AssetStudio.PInvoke;
+using AssetStudioExporter.Native;
 
 namespace FMOD
 {

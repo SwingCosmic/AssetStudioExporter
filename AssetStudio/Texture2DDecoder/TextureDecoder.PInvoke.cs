@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using AssetStudioExporter.Native;
 
 namespace Texture2DDecoder
 {
