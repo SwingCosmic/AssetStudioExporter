@@ -1,5 +1,6 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using AssetStudioExporter.AssetTypes.Feature;
 using System;
 using System.Collections.Generic;
 using System.Linq;

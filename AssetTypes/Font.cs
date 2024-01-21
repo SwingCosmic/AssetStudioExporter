@@ -1,6 +1,7 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetStudio;
+using AssetStudioExporter.AssetTypes.Feature;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,14 @@ using System.Threading.Tasks;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Font : IAssetType, IAssetTypeReader<Font>, IAssetTypeExporter
+    public class Font : INamedObject, IAssetType, IAssetTypeReader<Font>, IAssetTypeExporter
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Font;
+        public string Name
+        {
+            get => m_Name;
+            set => m_Name = value;
+        }
 
         public string m_Name;
         public byte[] m_FontData = Array.Empty<byte>();

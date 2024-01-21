@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Object : IAssetType, IAssetTypeReader<Object>
+    public abstract class Object
     {
-        public static AssetClassID AssetClassID { get; } = AssetClassID.Object;
+        public static Object Create() => new EmptyObject();
 
-        public static Object Read(AssetTypeValueField value)
+        internal class EmptyObject : Object, IAssetType, IAssetTypeReader<EmptyObject>
         {
-            return new Object();
+            public static AssetClassID AssetClassID { get; } = AssetClassID.Object;
+            public static EmptyObject Read(AssetTypeValueField value)
+            {
+                return new EmptyObject();
+            }
         }
     }
 }

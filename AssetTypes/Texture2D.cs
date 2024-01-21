@@ -1,16 +1,8 @@
-using AssetRipper.TextureDecoder.Astc;
-using AssetRipper.TextureDecoder.Atc;
-using AssetRipper.TextureDecoder.Bc;
-using AssetRipper.TextureDecoder.Dxt;
-using AssetRipper.TextureDecoder.Etc;
-using AssetRipper.TextureDecoder.Pvrtc;
-using AssetRipper.TextureDecoder.Rgb.Formats;
-using AssetRipper.TextureDecoder.Rgb;
-using AssetRipper.TextureDecoder.Yuy2;
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetsTools.NET.Texture;
 using AssetStudio;
+using AssetStudioExporter.AssetTypes.Feature;
 using AssetStudioExporter.Export;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -20,13 +12,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Half = System.Half;
 
 namespace AssetStudioExporter.AssetTypes
 {
     public class Texture2D : TextureFile, IAssetType, IAssetTypeReader<Texture2D>, IAssetTypeExporter
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Texture2D;
+
+        public string Name
+        {
+            get => m_Name;
+            set => m_Name = value;
+        }
 
         new TextureFormat m_TextureFormat;
 

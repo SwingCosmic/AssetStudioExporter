@@ -1,6 +1,7 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
 using AssetStudioExporter.AssetTypes;
+using AssetStudioExporter.AssetTypes.Feature;
 using AssetStudioExporter.Export;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,16 @@ using System.Text;
 
 namespace AssetStudio
 {
-    public sealed class AudioClip : IAssetType, IAssetTypeReader<AudioClip>, IAssetTypeExporter
+    public sealed class AudioClip : INamedObject, IAssetType, IAssetTypeReader<AudioClip>, IAssetTypeExporter
     {
 
         public static AssetClassID AssetClassID { get; } = AssetClassID.AudioClip;
 
+        public string Name
+        {
+            get => m_Name; 
+            set => m_Name = value;
+        }
 
         public string m_Name;
 

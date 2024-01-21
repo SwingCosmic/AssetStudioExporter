@@ -3,20 +3,20 @@ using AssetsTools.NET.Extra;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class Component : IAssetType, IAssetTypeReader<Component>
+    public class Component : Object, IAssetType, IAssetTypeReader<Component>
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.Component;
 
-        public PPtr<object> m_GameObject;
+        public PPtr<Object> m_GameObject;
 
-        public Component(PPtr<object> gameObject)
+        public Component(PPtr<Object> gameObject)
         {
             m_GameObject = gameObject;
         }
 
         public static Component Read(AssetTypeValueField value)
         {
-            var pptr = new PPtr<object>(value);
+            var pptr = new PPtr<Object>(value);
             return new Component(pptr);
         }
     }   

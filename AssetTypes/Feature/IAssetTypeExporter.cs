@@ -1,6 +1,11 @@
 using AssetsTools.NET.Extra;
 
-namespace AssetStudioExporter.AssetTypes;
+namespace AssetStudioExporter.AssetTypes.Feature;
+
+public interface IAssetTypeExporter<TSetting> where TSetting : class
+{
+    bool Export(AssetsFileInstance assetsFile, Stream stream, TSetting setting);
+}
 
 public interface IAssetTypeExporter
 {
@@ -12,9 +17,10 @@ public interface IAssetTypeExporter
     /// <returns>是否导出成功</returns>
     bool Export(AssetsFileInstance assetsFile, Stream stream);
 
+
     void Export(AssetsFileInstance assetsFile, string fileName)
     {
-        using(var fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
+        using (var fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write))
         {
             if (Export(assetsFile, fs))
             {

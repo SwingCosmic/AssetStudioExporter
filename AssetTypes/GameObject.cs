@@ -5,7 +5,7 @@ using System.Diagnostics.Metrics;
 
 namespace AssetStudioExporter.AssetTypes
 {
-    public class GameObject : IAssetType, IAssetTypeReader<GameObject>
+    public class GameObject : Object, IAssetType, IAssetTypeReader<GameObject>
     {
         public static AssetClassID AssetClassID { get; } = AssetClassID.GameObject;
 
