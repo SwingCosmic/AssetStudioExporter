@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>annotations</Nullable>
-	<Version>0.21.0.0</Version>
+    <Nullable>enable</Nullable>
+	<Version>0.23.2.0</Version>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<Platforms>x64;x86</Platforms>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -44,6 +44,10 @@
     <PackageReference Include="AssetsTools.NET" Version="3.0.0" />
     <PackageReference Include="AssetsTools.NET.Texture" Version="1.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AssetTypes\Abstractions\" />
   </ItemGroup>
 
 </Project>

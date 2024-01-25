@@ -3,6 +3,7 @@
 /* FMOD Studio - C# Wrapper . Copyright (c), Firelight Technologies Pty, Ltd. 2004-2016.      */
 /*                                                                                            */
 /* ========================================================================================== */
+#nullable disable
 
 using System;
 using System.Text;

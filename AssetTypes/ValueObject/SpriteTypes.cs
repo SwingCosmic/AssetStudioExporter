@@ -1,4 +1,4 @@
-using AssetsTools.NET;
+﻿using AssetsTools.NET;
 using AssetStudio;
 using AssetStudioExporter.Util;
 using System.Diagnostics.CodeAnalysis;
@@ -111,8 +111,8 @@ public class SpriteVertex : IAssetTypeReader<SpriteVertex>
 
 public class SpriteAtlasData : IAssetTypeReader<SpriteAtlasData>
 {
-    public PPtr<Texture2D> texture;
-    public PPtr<Texture2D> alphaTexture;
+    public PPtr<Texture2D> texture = null!;
+    public PPtr<Texture2D> alphaTexture = null!;
     public Rectf textureRect;
     public Vector2 textureRectOffset;
     public Vector2 atlasRectOffset;

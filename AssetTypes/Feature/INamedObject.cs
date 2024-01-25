@@ -11,7 +11,7 @@ public interface INamedObject
     /// <summary>
     /// 对象的名称
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
 }
 

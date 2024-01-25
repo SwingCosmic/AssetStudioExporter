@@ -24,16 +24,16 @@ public class AssetInfo
     }
 }
 
-public class AssetBundle : INamedObject, IAssetType, IAssetTypeReader<AssetBundle>
+public class AssetBundle : Object, INamedObject, IAssetType, IAssetTypeReader<AssetBundle>
 {
     public static AssetClassID AssetClassID { get; } = AssetClassID.AssetBundle;
-    public string Name
+    public string? Name
     {
         get => m_Name;
         set => m_Name = value;
     }
 
-    public string m_Name;
+    public string? m_Name;
     public Dictionary<string, AssetInfo> m_Container = new();
 
     public static AssetBundle Read(AssetTypeValueField value)
