@@ -1,6 +1,8 @@
 using AssetsTools.NET;
+using AssetsTools.NET.Extra;
 using AssetStudio;
 using AssetStudioExporter.Util;
+using FMOD;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -86,7 +88,7 @@ public class StreamInfo : IAssetTypeReader<StreamInfo>
 
     public StreamInfo() { }
 
-    public static StreamInfo Read(AssetTypeValueField value)
+    public static StreamInfo Read(AssetTypeValueField value, UnityVersion version)
     {
         var stream = new StreamInfo();
 
@@ -111,7 +113,7 @@ public class ChannelInfo : IAssetTypeReader<ChannelInfo>
     public byte format;
     public byte dimension;
 
-    public static ChannelInfo Read(AssetTypeValueField value)
+    public static ChannelInfo Read(AssetTypeValueField value, UnityVersion version)
     {
         var channel = new ChannelInfo();
 
@@ -125,25 +127,25 @@ public class ChannelInfo : IAssetTypeReader<ChannelInfo>
 
 public class VertexData : IAssetTypeReader<VertexData>
 {
-    //public uint m_CurrentChannels;
+    public uint m_CurrentChannels;
     public uint m_VertexCount;
     public List<ChannelInfo> m_Channels;
     public List<StreamInfo> m_Streams;
     public byte[] m_DataSize;
 
 
-    public static VertexData Read(AssetTypeValueField value)
+    public static VertexData Read(AssetTypeValueField value, UnityVersion version)
     {
         var vertex = new VertexData();
 
-        //if (version[0] < 2018)//2018 down
-        //{
-        //  m_CurrentChannels = reader.ReadUInt32();
-        //}
+        if (version.major < 2018)//2018 down
+        {
+            vertex.m_CurrentChannels = value["m_CurrentChannels"].AsUInt;
+        }
 
         vertex.m_VertexCount = value["m_VertexCount"].AsUInt;
         vertex.m_Channels = value["m_Channels"]
-            .AsList(c => ChannelInfo.Read(c));
+            .AsList(c => ChannelInfo.Read(c, version));
 
         //if (version[0] < 5) //5.0 down
         //{
@@ -151,7 +153,7 @@ public class VertexData : IAssetTypeReader<VertexData>
         //}
         //else //5.0 and up
         //{
-        vertex.GetStreams(new[] {2019});
+        vertex.GetStreams(version.ToIntArray());
         //}
 
         vertex.m_DataSize = value["m_DataSize"].AsByteArray;
@@ -255,6 +257,11 @@ public class BoneWeights4 : IAssetTypeReader<BoneWeights4>
     }
 
 
+    public static BoneWeights4 Read(AssetTypeValueField value, UnityVersion version)
+    {
+        return Read(value);
+    }    
+    
     public static BoneWeights4 Read(AssetTypeValueField value)
     {
         var weights = new BoneWeights4();
@@ -406,7 +413,7 @@ public class SubMesh : IAssetTypeReader<SubMesh>
     public uint vertexCount;
     public AABB localAABB;
 
-    public static SubMesh Read(AssetTypeValueField value)
+    public static SubMesh Read(AssetTypeValueField value, UnityVersion version)
     {
         var mesh = new SubMesh();
 

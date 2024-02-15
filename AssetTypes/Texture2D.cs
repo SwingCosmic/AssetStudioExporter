@@ -53,7 +53,7 @@ namespace AssetStudioExporter.AssetTypes
 
             pictureData = textureFile.pictureData;
         }
-        public static Texture2D Read(AssetTypeValueField value)
+        public static Texture2D Read(AssetTypeValueField value, UnityVersion version)
         {
             return new Texture2D(ReadTextureFile(value));
         }

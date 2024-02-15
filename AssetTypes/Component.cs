@@ -14,7 +14,7 @@ namespace AssetStudioExporter.AssetTypes
             m_GameObject = gameObject;
         }
 
-        public static Component Read(AssetTypeValueField value)
+        public static Component Read(AssetTypeValueField value, UnityVersion version)
         {
             var pptr = new PPtr<Object>(value);
             return new Component(pptr);

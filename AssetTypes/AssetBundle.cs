@@ -36,7 +36,7 @@ public class AssetBundle : Object, INamedObject, IAssetType, IAssetTypeReader<As
     public string? m_Name;
     public Dictionary<string, AssetInfo> m_Container = new();
 
-    public static AssetBundle Read(AssetTypeValueField value)
+    public static AssetBundle Read(AssetTypeValueField value, UnityVersion version)
     {
         var ab = new AssetBundle();
         ab.m_Name = value["m_Name"].AsString;

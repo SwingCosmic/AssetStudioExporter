@@ -22,7 +22,7 @@ namespace AssetStudioExporter.AssetTypes
         public string m_Name;
         public byte[] m_FontData = Array.Empty<byte>();
 
-        public static Font Read(AssetTypeValueField value)
+        public static Font Read(AssetTypeValueField value, UnityVersion Version)
         {
             var f = new Font();
 

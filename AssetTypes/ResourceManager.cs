@@ -16,7 +16,7 @@ public class ResourceManager : IAssetType, IAssetTypeReader<ResourceManager>
 
     public Dictionary<string, PPtr<Object>> m_Container = new();
 
-    public static ResourceManager Read(AssetTypeValueField value)
+    public static ResourceManager Read(AssetTypeValueField value, UnityVersion version)
     {
         var rm = new ResourceManager();
 

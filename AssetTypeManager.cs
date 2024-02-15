@@ -13,22 +13,16 @@ using System.Threading.Tasks;
 using Object = AssetStudioExporter.AssetTypes.Object;
 
 namespace AssetStudioExporter;
-
 public class AssetTypeManager
 {
-    public string UnityVersion { get;}
-    public int[] Version { get; }
+    public string VersionString => Version.ToString();
+    public UnityVersion Version { get; }
 
-    private static readonly Regex regex = new(@"(\d+)\.(\d+)\.(\d+)");
-    public AssetTypeManager(string version)
+    readonly AssetsManager am;
+    public AssetTypeManager(string version, AssetsManager manager)
     {
-        UnityVersion = version;
-        Version = regex
-            .Matches(version)[0]
-            .Groups.Values
-            .Skip(1)
-            .Select(v => int.Parse(v.Value))
-            .ToArray();
+        Version = new UnityVersion(version);
+        am = manager;
     }
 
     public T ReadAsset<T>(AssetTypeValueField valueField) where T : IAssetType
@@ -41,29 +35,31 @@ public class AssetTypeManager
     {
         return type switch
         {
-            AssetClassID.Object => Object.EmptyObject.Read(valueField),//0
-            AssetClassID.GameObject => GameObject.Read(valueField),//1
-            AssetClassID.Component => Component.Read(valueField),//2
+            AssetClassID.Object => Object.EmptyObject.Read(valueField, Version),//0
+            AssetClassID.GameObject => GameObject.Read(valueField, Version),//1
+            AssetClassID.Component => Component.Read(valueField, Version),//2
 
-            AssetClassID.Texture2D => Texture2D.Read(valueField),//28
-            AssetClassID.TextAsset => TextAsset.Read(valueField),//49
-            AssetClassID.AudioClip => AudioClip.Read(valueField),//83
-            AssetClassID.MonoBehaviour => MonoBehaviour.Read(valueField),//114
-            AssetClassID.MonoScript => MonoScript.Read(valueField),//115
-            AssetClassID.Font => Font.Read(valueField),//128
+            AssetClassID.Texture2D => Texture2D.Read(valueField, Version),//28
+            AssetClassID.TextAsset => TextAsset.Read(valueField, Version),//49
+            AssetClassID.AudioClip => AudioClip.Read(valueField, Version),//83
+            AssetClassID.MonoBehaviour => MonoBehaviour.Read(valueField, Version),//114
+            AssetClassID.MonoScript => MonoScript.Read(valueField, Version),//115
+            AssetClassID.Font => Font.Read(valueField, Version),//128
 
-            AssetClassID.AssetBundle => AssetBundle.Read(valueField),//142
-            AssetClassID.ResourceManager => ResourceManager.Read(valueField),//147
+            AssetClassID.AssetBundle => AssetBundle.Read(valueField, Version),//142
+            AssetClassID.ResourceManager => ResourceManager.Read(valueField, Version),//147
 
-            AssetClassID.SpriteAtlas => SpriteAtlas.Read(valueField),//687078895
+            AssetClassID.Sprite => Sprite.Read(valueField, Version),//213
 
-            _ => Object.EmptyObject.Read(valueField),
+            AssetClassID.SpriteAtlas => SpriteAtlas.Read(valueField, Version),//687078895
+
+            _ => Object.EmptyObject.Read(valueField, Version),
         };
     }
 
     public T ReadObject<T>(AssetTypeValueField valueField) where T : IAssetTypeReader<T>
     {
-        return T.Read(valueField);
+        return T.Read(valueField, Version);
     }
 
     public static bool TryGetExporter(IAssetType asset, [NotNullWhen(true)]out IAssetTypeExporter? exporter)

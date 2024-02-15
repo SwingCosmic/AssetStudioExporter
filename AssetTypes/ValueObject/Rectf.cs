@@ -1,4 +1,5 @@
 using AssetsTools.NET;
+using AssetsTools.NET.Extra;
 using AssetStudioExporter.AssetTypes;
 using System.Runtime.InteropServices;
 using System.Xml;
@@ -44,6 +45,11 @@ public struct Rectf : IEquatable<Rectf>, IAssetTypeReader<Rectf>
     }
 
 
+    public static Rectf Read(AssetTypeValueField value, UnityVersion version)
+    {
+        return Read(value);
+    }    
+    
     public static Rectf Read(AssetTypeValueField value)
     {
         return new Rectf()

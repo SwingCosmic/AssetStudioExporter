@@ -30,7 +30,7 @@ namespace AssetStudioExporter.AssetTypes
             m_Namespace = @namespace;
         }
 
-        public static MonoScript Read(AssetTypeValueField value)
+        public static MonoScript Read(AssetTypeValueField value, UnityVersion Version)
         {
             var className = value["m_ClassName"].AsString;
             var ns = value["m_Namespace"].AsString ?? "";

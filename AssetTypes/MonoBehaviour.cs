@@ -26,7 +26,7 @@ namespace AssetStudioExporter.AssetTypes
             m_Script = monoScript;
         }
 
-        public static MonoBehaviour Read(AssetTypeValueField value)
+        public static MonoBehaviour Read(AssetTypeValueField value, UnityVersion Version)
         {
             var name = value["m_Name"].AsString;
             var script = new PPtr<MonoScript>(value["m_Script"]);

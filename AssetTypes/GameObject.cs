@@ -15,7 +15,7 @@ namespace AssetStudioExporter.AssetTypes
 
 
 
-        public static GameObject Read(AssetTypeValueField value)
+        public static GameObject Read(AssetTypeValueField value, UnityVersion version)
         {
             var gameObject = new GameObject();
 

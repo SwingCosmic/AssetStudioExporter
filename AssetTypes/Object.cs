@@ -15,7 +15,7 @@ namespace AssetStudioExporter.AssetTypes
         internal class EmptyObject : Object, IAssetType, IAssetTypeReader<EmptyObject>
         {
             public static AssetClassID AssetClassID { get; } = AssetClassID.Object;
-            public static EmptyObject Read(AssetTypeValueField value)
+            public static EmptyObject Read(AssetTypeValueField value, UnityVersion version)
             {
                 return new EmptyObject();
             }

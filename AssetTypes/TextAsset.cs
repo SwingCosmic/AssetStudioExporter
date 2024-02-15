@@ -15,7 +15,7 @@ namespace AssetStudioExporter.AssetTypes
 
         public byte[] m_Script;
 
-        public static TextAsset Read(AssetTypeValueField value)
+        public static TextAsset Read(AssetTypeValueField value, UnityVersion version)
         {
             var textAsset = new TextAsset();
 

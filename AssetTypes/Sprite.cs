@@ -37,7 +37,7 @@ public class Sprite : INamedObject, IAssetType, IAssetTypeReader<Sprite>
     public List<object> m_Bones;
 
 
-    public static Sprite Read(AssetTypeValueField value)
+    public static Sprite Read(AssetTypeValueField value, UnityVersion version)
     {
         var s = new Sprite();
         s.m_Name = value["m_Name"].AsString;
@@ -48,28 +48,28 @@ public class Sprite : INamedObject, IAssetType, IAssetTypeReader<Sprite>
         s.m_Extrude = value["m_Extrude"].AsUInt;
         s.m_IsPolygon = value["m_IsPolygon"].AsBool;
 
-        //if (version[0] >= 2017) //2017 and up
-        var m_RenderDataKey = value["m_RenderDataKey"];
-        var first = m_RenderDataKey["first"].AsUnityGUID();
-        var second = m_RenderDataKey["second"].AsLong;
-        s.m_RenderDataKey = new KeyValuePair<Guid, long>(first, second);
+        if (version.major >= 2017) {//2017 and up
+            var m_RenderDataKey = value["m_RenderDataKey"];
+            var first = m_RenderDataKey["first"].AsUnityGUID();
+            var second = m_RenderDataKey["second"].AsLong;
+            s.m_RenderDataKey = new KeyValuePair<Guid, long>(first, second);
 
-        s.m_AtlasTags = value["m_AtlasTags"]
-            .AsArray(t => t.AsString);
+            s.m_AtlasTags = value["m_AtlasTags"]
+                .AsArray(t => t.AsString);
 
-        s.m_SpriteAtlas = PPtr<SpriteAtlas>.Read(value["m_SpriteAtlas"]);
-        //}
+            s.m_SpriteAtlas = PPtr<SpriteAtlas>.Read(value["m_SpriteAtlas"]);
+        }
 
-        s.m_RD = SpriteRenderData.Read(value["m_RD"]);
+        s.m_RD = SpriteRenderData.Read(value["m_RD"], version);
 
-        //if (version[0] >= 2017)
-        s.m_PhysicsShape = value["m_PhysicsShape"]
-            .AsList(s => s.AsArray(v => v.AsVector2()));
-        //}
+        if (version.major >= 2017) {
+            s.m_PhysicsShape = value["m_PhysicsShape"]
+                .AsList(s => s.AsArray(v => v.AsVector2()));
+        }
 
-        //if (version[0] >= 2018) //2018 and up
-        s.m_Bones = value["m_Bones"].AsList(b => (object)b.ToString());
-        //}
+        if (version.major >= 2018) { //2018 and up
+            s.m_Bones = value["m_Bones"].AsList(b => (object)b.ToString());
+        }
 
         return s;
     }

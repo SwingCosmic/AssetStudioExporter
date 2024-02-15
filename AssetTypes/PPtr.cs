@@ -1,5 +1,7 @@
 using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using AssetStudio;
+using AssetStudioExporter.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -62,7 +64,8 @@ public class PPtr<T> : IAssetTypeReader<PPtr<T>> where T : class
         try
         {
             var bf = FollowReference(relativeFile, am, false);
-            Instance = R.Read(bf);
+            var version = VersionCache.GetVersion(relativeFile);
+            Instance = R.Read(bf, version);
         }
         catch (Exception ex)
         {
@@ -89,6 +92,10 @@ public class PPtr<T> : IAssetTypeReader<PPtr<T>> where T : class
         return new PPtr<U>(m_FileID, m_PathID);
     }
 
+    public static PPtr<T> Read(AssetTypeValueField value, UnityVersion version)
+    {
+        return Read(value);
+    }
     public static PPtr<T> Read(AssetTypeValueField value)
     {
         return new PPtr<T>(value);

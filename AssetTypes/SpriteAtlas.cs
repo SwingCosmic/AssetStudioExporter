@@ -24,7 +24,7 @@ public class SpriteAtlas : INamedObject, IAssetType, IAssetTypeReader<SpriteAtla
     public string m_Tag;
     public bool m_IsVariant;
 
-    public static SpriteAtlas Read(AssetTypeValueField value)
+    public static SpriteAtlas Read(AssetTypeValueField value, UnityVersion version)
     {
         var sa = new SpriteAtlas();
 
@@ -42,7 +42,7 @@ public class SpriteAtlas : INamedObject, IAssetType, IAssetTypeReader<SpriteAtla
             var guid = key["first"].AsUnityGUID();
             var id = key["second"].AsLong;
 
-            var v = SpriteAtlasData.Read(pair["second"]);
+            var v = SpriteAtlasData.Read(pair["second"], version);
 
             sa.m_RenderDataMap[new(guid, id)] = v;
         }
