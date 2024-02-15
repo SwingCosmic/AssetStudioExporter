@@ -1,4 +1,4 @@
-﻿using AssetsTools.NET;
+using AssetsTools.NET;
 using AssetStudio;
 using AssetStudioExporter.Util;
 using System.Diagnostics.CodeAnalysis;
@@ -152,7 +152,7 @@ public class SpriteAtlasData : IAssetTypeReader<SpriteAtlasData>
     }
 }
 
-public class SpriteRenderData
+public class SpriteRenderData : IAssetTypeReader<SpriteRenderData>
 {
     public PPtr<Texture2D> texture;
     public PPtr<Texture2D> alphaTexture;
@@ -171,5 +171,62 @@ public class SpriteRenderData
     public Vector4 uvTransform;
     public float downscaleMultiplier;
 
+    public static SpriteRenderData Read(AssetTypeValueField value)
+    {
+        var rd = new SpriteRenderData();
 
+        rd.texture = PPtr<Texture2D>.Read(value["texture"]);
+        rd.alphaTexture = PPtr<Texture2D>.Read(value["alphaTexture"]);
+
+
+        //if (version[0] >= 2019) //2019 and up
+        var secondaryTextures = value["secondaryTextures"];
+        if (!secondaryTextures.IsDummy)
+        {
+            rd.secondaryTextures = secondaryTextures
+                .AsList(t => new SecondarySpriteTexture(t));
+        }
+        //}
+
+        //if (version[0] > 5 || (version[0] == 5 && version[1] >= 6)) //5.6 and up
+        rd.m_SubMeshes = value["m_SubMeshes"].AsList(SubMesh.Read);
+        rd.m_IndexBuffer = value["m_IndexBuffer"].AsByteArray;
+        rd.m_VertexData = VertexData.Read(value["m_VertexData"]);
+        //} else {
+        //  rd.vertices = value["vertices"].AsList(SpriteVertex.Read);
+        //}
+
+        //if (version[0] >= 2018) //2018 and up
+        //{
+            var m_Bindpose = value["m_Bindpose"];
+            if (!m_Bindpose.IsDummy)
+            {
+                rd.m_Bindpose = m_Bindpose.AsArray(p => p.AsMatrix4x4());
+            }
+
+            //if (version[0] == 2018 && version[1] < 2) //2018.2 down
+            //{
+            var m_SourceSkin = value["m_SourceSkin"];
+            if (!m_SourceSkin.IsDummy)
+            {
+                rd.m_SourceSkin = m_SourceSkin.AsList(BoneWeights4.Read);
+            }
+
+        //}
+        //}
+
+        rd.textureRect = Rectf.Read(value["textureRect"]);
+        rd.textureRectOffset = value["textureRectOffset"].AsVector2();
+
+        rd.atlasRectOffset = value["atlasRectOffset"].AsVector2();
+        rd.settingsRaw = new SpriteSettings(value["settingsRaw"].AsUInt);
+
+        rd.uvTransform = value["uvTransform"].AsVector4();
+
+        //if (version[0] >= 2017) //2017 and up
+        rd.downscaleMultiplier = value["downscaleMultiplier"].AsFloat;
+        //}
+
+        return rd;
+    }
 }

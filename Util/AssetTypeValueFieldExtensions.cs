@@ -103,4 +103,10 @@ public static class AssetTypeValueFieldExtensions
             value["m_Extent"].AsVector3()
         );
     }
+    
+    public static Matrix4x4 AsMatrix4x4(this AssetTypeValueField value)
+    {
+        var values = value.AsArray(v => v.AsFloat);
+        return new Matrix4x4(values);
+    }
 }
