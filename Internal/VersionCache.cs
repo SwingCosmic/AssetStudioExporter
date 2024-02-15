@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace AssetStudioExporter.Internal;
 
+[Obsolete("没必要空间换时间")]
 internal static class VersionCache
 {
     static readonly ConditionalWeakTable<AssetsFileInstance, UnityVersion> cache = new();

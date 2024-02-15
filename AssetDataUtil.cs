@@ -57,7 +57,8 @@ public static class AssetDataUtil
 
     public static UnityVersion GetVersion(this AssetsFileInstance inst)
     {
-        return VersionCache.GetVersion(inst);
+        //return VersionCache.GetVersion(inst);
+        return new UnityVersion(inst.file.Metadata.UnityVersion);
     }
 
     /// <summary>
